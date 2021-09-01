@@ -1,6 +1,6 @@
 import { CommanderRepository } from "../../logic/repositories/commanderRepository";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../..//logic/utils/types";
+import { TYPES } from "../../types";
 @injectable()
 export class CommanderService {
   private repository: CommanderRepository;

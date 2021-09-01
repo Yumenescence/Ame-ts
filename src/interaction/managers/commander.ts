@@ -1,7 +1,8 @@
 const { join } = require("path");
-import { inject, injectable } from "inversify";
-import { TYPES } from "../../logic/utils/types";
+
 import { Client, Collection, Message } from "discord.js";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../types";
 import { CommanderService } from "../services/commanderService";
 const commandDirectory = join(__dirname, "../commands");
 
@@ -33,6 +34,7 @@ export class Commander {
 
   private handleMessage(message: Message) {
     const { content } = message;
+    console.log("content", content);
     if (!content.startsWith(this.prefix)) {
       return null;
     }
@@ -62,6 +64,7 @@ export class Commander {
 
   private getCommand(name: string) {
     const lowerName = name.toLowerCase();
+    console.log("this.commands", this.commands);
     return this.commands.find(
       (command: { aliases: Array<string>; name: string }) =>
         this.findAlias(command, lowerName) || command.name === lowerName
@@ -74,9 +77,11 @@ export class Commander {
 
   async runCommand(message: Message, name: string, args: Array<string>) {
     const command = this.getCommand(name);
+    console.log("command", command);
     if (!command) return null;
 
     command.message = message;
+    console.log("command", command);
     return command.run(message, args);
   }
 }

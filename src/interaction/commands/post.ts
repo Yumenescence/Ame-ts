@@ -1,3 +1,4 @@
+import { Message } from "discord.js";
 import { injectable } from "inversify";
 
 @injectable()
@@ -7,7 +8,7 @@ export default class Post {
     this.name = "ping";
   }
 
-  async run(message: any, args = []) {
-    message.channel.send("pong!");
+  async run(message: Message): Promise<void> {
+    message.channel.send("pongg!");
   }
 }

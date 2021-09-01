@@ -1,34 +1,29 @@
 import { Client } from "discord.js";
 import { inject, injectable } from "inversify";
-import { TYPES } from "./logic/utils/types";
 import { Commander } from "./interaction/managers/commander";
+import { TYPES } from "./types";
 
 @injectable()
 export class BotClient {
-  private client: Client;
-  private readonly token: string;
-  private commander: Commander;
-
   constructor(
-    @inject(TYPES.Client) client: Client,
-    @inject(TYPES.Token) token: string,
-    @inject(TYPES.Commander) commander: Commander
+    @inject(TYPES.Client) private client: Client,
+    @inject(TYPES.Token) private readonly token: string,
+    @inject(TYPES.Commander) private commander: Commander
   ) {
     this.client = client;
     this.token = token;
     this.commander = commander;
   }
 
-  public start(): Promise<string> {
-    this.prepare();
+  start(): Promise<string> {
+    this.loadCommandsOnReady();
     return this.client.login(this.token);
   }
 
-  public prepare() {
+  private loadCommandsOnReady(): void {
     this.client.on("ready", async () => {
-      await this.commander
-        .loadCommands()
-        .then(() => console.log("Commands loaded successfully!"));
+      await this.commander.loadCommands();
+      console.log("Commands loaded successfully!");
     });
   }
 }
